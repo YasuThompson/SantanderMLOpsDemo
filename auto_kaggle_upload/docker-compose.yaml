@@ -1,0 +1,10 @@
+version: '3'
+services:
+  kaggle_worker:
+    build: .
+    volumes:
+      - ..:/work
+      - ../data:/root/.kaggle # dataファイル下にkaggle.jsonが存在してると仮定している．
+    working_dir: /work
+    container_name: kaggle_container_tmp
+    command: ["python", "auto_kaggle_upload/submit.py"]
