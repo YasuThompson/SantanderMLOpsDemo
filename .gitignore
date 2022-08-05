@@ -1,0 +1,11 @@
+# cache
+**.pyc
+**__pycache__/
+.**_cache/
+
+# data
+**data/
+**.DS_Store
+
+# jupyter
+**.ipynb_checkpoints/
