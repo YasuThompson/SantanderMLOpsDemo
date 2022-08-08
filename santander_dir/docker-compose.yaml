@@ -1,0 +1,9 @@
+version: '3'
+services:
+  kaggle_worker:
+    build: .
+    volumes:
+      - ..:/workspace
+    working_dir: /workspace
+    container_name: santander_container
+    command: ["python", "./ham_mlops_prototype/baseline_book.py"]
