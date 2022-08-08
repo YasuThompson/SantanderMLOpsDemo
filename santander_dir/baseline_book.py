@@ -49,28 +49,59 @@ param = {
         'verbosity': 0
     }
 
-def validate_with_map7():
-    return 
+#def validate_with_map7():
+#    return 
 
 def main():
+    #### Phase 1 ####
+    # DADA LAODING. 
+    # Preferably in an SQL server or a distributed storage. 
+    print("Loading data from csv files")
     trn = pd.read_csv(train_path, low_memory=False)
     tst = pd.read_csv(test_path, low_memory=False)
     
+    #### Phase 2 ####
+    # DATA CLEANING. 
+    # Preferably completed before SQL server. 
+    print("Cleaning and joining training data.")
     df = clean_data(trn, tst)
     
+    #### Phase 3 ####
+    # Data engineering. 
+    # Preferably implemented with SQL or Apache Spark.
+    # Preferably saved to a feature store. 
+    print("Cleaning and joining training data.")
     trn, tst, features = data_engineering(df, use_dates, test_date)
     
+    
+    """
+    ↑ DATA ENGINEERING
+    
+    Feature store should be placed here. 
+    *A border between data engineering and data scinece. 
+    
+    ↓ DATA SCIENCE
+    """
+    
+    
+    
+    #### Phase 4 ####
+    # DATA SPLIT FOR CROSS VALIDATION. 
+    print("Splitting into training and validation data as Numpy arrays..")
     X_trn, Y_trn, X_vld, Y_vld = split_data(trn, features)
     
+    
+    #### Phase 5 ####
+    # MODEL INITIALIZATION AND TRAINING. 
     dtrn = xgb.DMatrix(X_trn, label=Y_trn, feature_names=features)
     dvld = xgb.DMatrix(X_vld, label=Y_vld, feature_names=features)
     watch_list = [(dtrn, 'train'), (dvld, 'eval')]
+    print("Training a model")
     model = xgb.train(param, dtrn, num_boost_round=10, evals=watch_list, early_stopping_rounds=20)
     
     pickle.dump(model, open("./model/xgb.baseline.pkl", "wb"))
     best_ntree_limit = model.best_ntree_limit
 
-    
     #dall = xgb.DMatrix(X_all, label=Y_all, feature_names=features)
     #best_ntree_limit = int(best_ntree_limit * (len(XY_trn) + len(XY_vld)) / len(XY_trn))
     
@@ -79,6 +110,9 @@ def main():
         print(kv)
         
         
+    #### Phase 5 ####
+    # INFERENCE AND EVAULATION    
+    print("Inference on test data")    
     X_tst = tst[features].values
     dtst = xgb.DMatrix(X_tst, feature_names=features)
     preds_tst = model.predict(dtst, ntree_limit=best_ntree_limit)
@@ -86,6 +120,7 @@ def main():
     #preds_tst = preds_tst - tst.as_matrix(columns=[prod + '_prev' for prod in prods])
     preds_tst = preds_tst - tst[[prod + '_prev' for prod in prods]].values
     
+    print("Exporting results on test data")
     submit_file = open('./model/xgb.baseline.2015-06-28', 'w')
     submit_file.write('ncodpers,added_products\n')
     for ncodper, pred in zip(ncodpers_tst, preds_tst):
@@ -96,5 +131,6 @@ def main():
 
     
 if __name__ == '__main__':
+    
     main()
     
