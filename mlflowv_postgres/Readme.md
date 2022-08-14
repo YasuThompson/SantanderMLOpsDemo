@@ -35,7 +35,7 @@ docker-compose logs --follow
 docker exec -it db-server sh
 ```
 
-上のコマンドでコンテナに入った後，`/var/lib/mysql`でデータベースのファイルをデバッグするか，下のコマンドでマウントしたホストのディレクトリにデータベースのファイルをコピーする．
+上のコマンドでコンテナに入った後，`/var/lib/mysql`(postgressを使う場合はたぶん`/var/lib/postgres/data`)でデータベースのファイルをデバッグするか，下のコマンドでマウントしたホストのディレクトリにデータベースのファイルをコピーする．
 
 ```sh
 cp -r /var/lib/mysql /data_backup
@@ -47,7 +47,7 @@ docker-compose.yamlそのままの設定ではデータベースが空のデー�
 逆に/var/lib/mysqlにデータが存在するとき**初期化できずにエラー落ちする．**
 そのため以下のコードでボリュームを再生成する．
 当然ボリュームの中のデータは全て破棄される．
-データのバックアップを取りたいときは
+データのバックアップを取りたいときは[上](#**ちょっと重要**-:-データベースのファイルに直にアクセスする．)を参考に．
 
 ```sh
 docker volume rm mlflowv3
@@ -57,3 +57,4 @@ docker volume create mlflowv3
 ## 参考
 
 https://qiita.com/c60evaporator/items/e1fd57a0263a19b629d1
+
