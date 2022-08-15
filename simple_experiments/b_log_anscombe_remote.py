@@ -5,7 +5,6 @@ import configparser
 #cfg.read('./config.ini', encoding='utf-8')
 # 各種パスを指定
 #TRACKING_URI = cfg['Path']['tracking_uri']
-# TRACKING_URI = 'http://10.12.0.209:5001'
 TRACKING_URI = 'http://gpu25:5001'
 
 # トラッキングサーバの場所を指定
