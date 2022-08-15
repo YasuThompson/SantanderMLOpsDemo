@@ -1,40 +1,14 @@
 services:
-#  db-server:
-#    image: mysql:5.7
-#    container_name: ${DB_HOST}
-#    platform: 'linux/amd64'
-#    restart: always
-#    environment:
-#      MYSQL_USER: ${MYSQL_USER}
-#      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
-#      MYSQL_DATABASE: ${DB_NAME}
-#      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
-#      TZ: "Asia/Tokyo"
-#    ports:
-#      - 3307:3307
-#    volumes:
-#      - mlflowv_postgres:/var/lib/mysql
-#      - $PWD/db_server:/data_backup
-#
-#  adminer:
-#    image: adminer
-#    container_name: adminer
-#    restart: always
+#  waitfordb:
+#    image: dadarek/wait-for-dependencies
 #    depends_on:
 #      - db-server
-#    ports:
-#      - "8081:8081"
-
-  waitfordb:
-    image: dadarek/wait-for-dependencies
-    depends_on:
-      - db-server
-    restart: always
-    command: db-server:5436
-
+#    restart: always
+#    command: db-server:5432
   db-server:
     image: postgres:13.3
     container_name: ${DB_HOST}
+    platform: 'linux/amd64'
     restart: always
     environment:
       POSTGRES_USER: ${POSTGRES_USER}
@@ -42,7 +16,7 @@ services:
       POSTGRES_DB: ${DB_NAME}
       TZ: "Asia/Tokyo"
     ports:
-      - 5436:5432
+      - 5432:5432
     volumes:
       #- $PWD/db_server:/var/lib/postgresql/data
       - mlflowv_postgres:/var/lib/postgresql/data
@@ -52,7 +26,7 @@ services:
     image: dpage/pgadmin4
     restart: always
     ports:
-      - 8082:81
+      - "8082:81"
     environment:
       PGADMIN_DEFAULT_EMAIL: ${PGADMIN_EMAIL}
       PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_PASSWORD}
@@ -87,6 +61,7 @@ services:
       - "30001-30010:30001-30010"
     volumes:
       - $PWD/ftp/data:/home/ftpusers
+
     environment:
       - PUBLICHOST=localhost
       - FTP_USER_NAME=${FTP_USER_NAME}

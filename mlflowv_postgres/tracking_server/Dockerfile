@@ -22,7 +22,7 @@ COPY --from=builder /usr/local/bin/gunicorn /usr/local/bin/gunicorn
 
 # open port 5001
 EXPOSE 5001
-EXPOSE 5436
+#EXPOSE 5432
 
 # set environment variables
 ARG POSTGRES_USER
@@ -40,5 +40,5 @@ ENV DEFAULT_ARTIFACT_ROOT=${DEFAULT_ARTIFACT_ROOT}
 CMD mlflow server \
     --host 0.0.0.0 \
     --port 5001 \
-    --backend-store-uri postgresql+psycopg2://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${DB_HOST}:5436/${DB_NAME} \
+    --backend-store-uri postgresql+psycopg2://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${DB_HOST}:5432/${DB_NAME} \
     --default-artifact-root ${DEFAULT_ARTIFACT_ROOT}
