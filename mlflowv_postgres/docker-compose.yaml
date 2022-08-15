@@ -45,7 +45,7 @@ services:
         - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
         - DB_HOST=${DB_HOST}
         - DB_NAME=${DB_NAME}
-        - DEFAULT_ARTIFACT_ROOT=ftp://${FTP_USER_NAME}:${FTP_USER_PASS}@${HOST_IP}/artifact_location
+        - DEFAULT_ARTIFACT_ROOT=ftp://${FTP_USER_NAME}:${FTP_USER_PASS}@${HOST_IP}:10022/home/ftpusers
     image: mlflow-tracking:1.0
     restart: always
     ports:
@@ -57,7 +57,7 @@ services:
     image: stilliard/pure-ftpd:latest
     container_name: ftp-server
     ports:
-      - "10022:22"
+      - "10022:21"
       - "30001-30010:30001-30010"
     volumes:
       - $PWD/ftp/data:/home/ftpusers
