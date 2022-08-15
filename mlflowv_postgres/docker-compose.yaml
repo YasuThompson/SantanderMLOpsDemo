@@ -26,7 +26,7 @@ services:
     image: dpage/pgadmin4
     restart: always
     ports:
-      - "8082:81"
+      - "8082:80"
     environment:
       PGADMIN_DEFAULT_EMAIL: ${PGADMIN_EMAIL}
       PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_PASSWORD}
