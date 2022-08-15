@@ -19,7 +19,7 @@ services:
       - 5432:5432
     volumes:
       #- $PWD/db_server:/var/lib/postgresql/data
-      - mlflowv_postgres:/var/lib/postgresql/data
+      - mlflowv_postgres_sql:/var/lib/postgresql/data
       - $PWD/db_server:/data_backup
 
   pgadmin:
@@ -60,7 +60,8 @@ services:
       - "10022:21"
       - "30001-30010:30001-30010"
     volumes:
-      - $PWD/ftp/data:/home/ftpusers
+      - $PWD/ftp/data:/data_backup
+      - mlflowv_postgres_ftp:/home/ftpusers
 
     environment:
       - PUBLICHOST=localhost
@@ -71,5 +72,9 @@ services:
     restart: always
 
 volumes:
-  mlflowv_postgres:
-    external: true
+  mlflowv_postgres_sql:
+    external: false
+    name: mlflowv_postgres_sql
+  mlflowv_postgres_ftp:
+    external: false
+    name: mlflowv_postgres_ftp
