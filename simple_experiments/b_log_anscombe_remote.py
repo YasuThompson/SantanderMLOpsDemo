@@ -5,8 +5,8 @@ import configparser
 #cfg.read('./config.ini', encoding='utf-8')
 # 各種パスを指定
 #TRACKING_URI = cfg['Path']['tracking_uri']
-TRACKING_URI = 'http://10.12.0.115:5001'
-
+# TRACKING_URI = 'http://10.12.0.209:5001'
+TRACKING_URI = 'http://gpu25:5001'
 
 # トラッキングサーバの場所を指定
 mlflow.set_tracking_uri(TRACKING_URI)
@@ -52,9 +52,11 @@ def poly_regression(n, X, y, ax):
     X_view = np.linspace(np.amin(X), np.amax(X), 200).reshape(200, 1)
     X_view_poly = pf.transform(X_view)
     y_pred_view = lr.predict(X_view_poly)  # 回帰線を作成
+
     ax.scatter(X_test.ravel(), y_test)  # テストデータを散布図プロット
     ax.plot(X_view.ravel(), y_pred_view, c='red')  # 回帰線をプロット
     ax.set_title(f'Degree={n}')
+
 
 # 次数を変えてスコアを評価するメソッド
 def validate_degrees(data, dataset_name):
@@ -74,4 +76,19 @@ def validate_degrees(data, dataset_name):
         fig.suptitle(f'Dataset={dataset_name}', size=16)
         mlflow.log_figure(fig, f'figure_{dataset_name}.png')
         plt.show()
+        
 
+# %% main for debug
+
+if __name__ == '__main__':
+    # スタブデータセットを作成
+    import pandas as pd
+    dataset_name = 'stb_dataset'
+    x = np.arange(0, 10, .1)
+    def  __stb_poly(x):
+        return x + x ** 2 + 2 * x ** 3 + np.random.randn(x.shape[0])
+    y = __stb_poly(x)
+    dataset = pd.DataFrame([list(x) for x in zip(*[[dataset_name] * x.shape[0], x, y])], columns=['dataset', 'x', 'y'])
+    print('dataset created...')
+    validate_degrees(dataset, dataset_name)
+# %%
