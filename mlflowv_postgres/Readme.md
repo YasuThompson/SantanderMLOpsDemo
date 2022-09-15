@@ -54,6 +54,18 @@ docker volume rm mlflowv3
 docker volume create mlflowv3
 ```
 
+## 構成
+
+```mermaid
+
+flowchart LR;
+id3(viewer: web browser) <-- manual request, visual data-->　id1[tracking server: port 5001]
+subgraph Server;
+id1 <-- request, new data --> id2[(dbserver: port 5432)];
+id1 <-- request, data --> id4[(artifact server: port 80)];
+end;
+```
+
 ## 参考
 
 https://qiita.com/c60evaporator/items/e1fd57a0263a19b629d1
