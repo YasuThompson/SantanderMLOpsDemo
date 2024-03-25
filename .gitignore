@@ -10,4 +10,4 @@
 # jupyter
 **.ipynb_checkpoints/
 
-kubeflow/
+k8s/kubeflow/
