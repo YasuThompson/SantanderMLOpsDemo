@@ -1,4 +1,4 @@
-# ham_mlops_prototype/auto_kaggele_upload
+# SantanderMLOpsDemo/auto_kaggele_upload
 
 ## 方法1. 手動でコンテナを起動する．
 

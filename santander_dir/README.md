@@ -1,8 +1,8 @@
-# ham_mlops_prototype/santander_dir
+# SantanderMLOpsDemo/santander_dir
 
-## 実行方法
+## Execution Instructions
 
-### Kaggle で所定のデータをダウンロードして，正しいパスにおいてとりあえず以下のコマンドで訓練，提出ファイルの作成
+### Download the required data from Kaggle and place it in the correct path, then train and create submission files with the following commands:
 
 ```sh
 mkdir ./santander_dir/model
@@ -12,8 +12,7 @@ mkdir ./santander_dir/model
 python ./santander_dir/baseline_book.py
 ```
 
-## 参考
+## Reference
 
-* [Kaggle のコンペ](https://www.kaggle.com/c/santander-product-recommendation)
-* [コードネタ](https://book.mynavi.jp/files/user/support/9784839968939/kaggleml.zip)
-<!-- *  -->
+* [Kaggle Competition](https://www.kaggle.com/c/santander-product-recommendation)
+* [Code Resources](https://book.mynavi.jp/files/user/support/9784839968939/kaggleml.zip)
