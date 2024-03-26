@@ -1,82 +1,53 @@
 import pandas as pd
 import numpy as np
 import xgboost as xgb
-from mapk import mapk
 import pickle
 
-
 from process_data_santander import clean_data, data_engineering, split_data
-
+from load_local_data import load_local_data
 np.random.seed(2018)
 
 
-
-prods = ['ind_ahor_fin_ult1', 'ind_aval_fin_ult1', 'ind_cco_fin_ult1', 'ind_cder_fin_ult1', 'ind_cno_fin_ult1', 'ind_ctju_fin_ult1',
-             'ind_ctma_fin_ult1', 'ind_ctop_fin_ult1', 'ind_ctpp_fin_ult1', 'ind_deco_fin_ult1', 'ind_deme_fin_ult1', 'ind_dela_fin_ult1',
-             'ind_ecue_fin_ult1', 'ind_fond_fin_ult1', 'ind_hip_fin_ult1', 'ind_plan_fin_ult1', 'ind_pres_fin_ult1', 'ind_reca_fin_ult1',
-             'ind_tjcr_fin_ult1', 'ind_valo_fin_ult1', 'ind_viv_fin_ult1', 'ind_nomina_ult1', 'ind_nom_pens_ult1', 'ind_recibo_ult1']
+def load_local_data(csv_path):
+    return pd.read_csv(csv_path, sep=',', low_memory=False)
 
 
-train_path = '../data/santander-product-recommendation/train_ver2_small.csv'
-test_path = '../data/santander-product-recommendation/test_ver2.csv'
+def split_data(trn, features, val_dates, prod_cols):
+    # 訓練データから新規購買件数だけを抽出します。
+    X = []
+    Y = []
+    for i, prod in enumerate(prod_cols):
+        prev = prod + '_prev'
+        prX = trn[(trn[prod] == 1) & (trn[prev] == 0)]
+        prY = np.zeros(prX.shape[0], dtype=np.int8) + i
+        X.append(prX)
+        Y.append(prY)
+    XY = pd.concat(X)
+    Y = np.hstack(Y)
+    XY['y'] = Y
 
-# use_dates = ['2016-02-28', '2016-03-28', '2016-04-28', '2016-05-28']
-use_dates = ['2015-01-28', '2015-02-28', '2015-03-28']
-val_dates = ['2015-03-28']
-test_dates =  ['2016-06-28']
+    # 訓練、検証データに分離します。
 
-param = {
-        'booster': 'gbtree',
-        'max_depth': 8,
-        'nthread': 4,
-        'num_class': 24,
-        'objective': 'multi:softprob',
-        'silent': 1,
-        'eval_metric': 'mlogloss',
-        'eta': 0.1,
-        'min_child_weight': 10,
-        'colsample_bytree': 0.8,
-        'colsample_bylevel': 0.9,
-        'seed': 2018,
-        'verbosity': 0
-    }
+    # XY_trn = XY[XY['fecha_dato'] != vld_date]
+    # XY_vld = XY[XY['fecha_dato'] == vld_date]
+    XY_trn = XY[~XY['fecha_dato'].isin(val_dates)]
+    XY_vld = XY[XY['fecha_dato'].isin(val_dates)]
+
+    # 訓練、検証データを XGBoost 形態に変換します。
+    X_trn = XY_trn[features].values
+    Y_trn = XY_trn['y'].values
+    # dtrn = xgb.DMatrix(X_trn, label=Y_trn, feature_names=features)
+
+    X_vld = XY_vld[features].values
+    Y_vld = XY_vld['y'].values
+    # dvld = xgb.DMatrix(X_vld, label=Y_vld, feature_names=features)
+
+    return X_trn, Y_trn, X_vld, Y_vld
 
 #def validate_with_map7():
 #    return 
 
 def main():
-    #### Phase 1 ####
-    # DADA LAODING. 
-    # Preferably in an SQL server or a distributed storage. 
-    print("Loading data from csv files")
-    trn = pd.read_csv(train_path, sep=',', low_memory=False)
-    tst = pd.read_csv(test_path, sep=',',  low_memory=False)
-    
-    #### Phase 2 ####
-    # DATA CLEANING. 
-    # Preferably completed before SQL server. 
-    print("Cleaninng data.")
-    df = clean_data(trn, tst)
-    
-    #### Phase 3 ####
-    # Data engineering. 
-    # Preferably implemented with SQL or Apache Spark.
-    # Preferably saved to a feature store. 
-    print("Labeling data.")
-    trn, tst, features = data_engineering(df, use_dates, test_dates)
-    
-    
-    """
-    ↑ DATA ENGINEERING
-    
-    Feature store should be placed here. 
-    *A border between data engineering and data scinece. 
-    
-    ↓ DATA SCIENCE
-    """
-
-    
-    
     #### Phase 4 ####
     # DATA SPLIT FOR CROSS VALIDATION. 
     print("Splitting into training and validation data as Numpy arrays..")
