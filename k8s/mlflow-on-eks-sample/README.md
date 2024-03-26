@@ -1,3 +1,9 @@
+> [!WARNING]
+> 
+> AWS EKS clusters cost $0.10 per hour (and other components might cost more), so you may incur charges by running this tutorial. The cost should be a few dollars at most, but be sure to delete your infrastructure promptly to avoid additional charges. We are not responsible for any charges you may incur.
+
+
+
 # 0. Prerequisites
 
 - install awscli and setup awscli (`aws configure`).
