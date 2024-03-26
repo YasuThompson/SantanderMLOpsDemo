@@ -80,5 +80,5 @@ terraform destroy
 
 ## Reference
 
-kubernetes-mlops https://github.com/AlexIoannides/kubernetes-mlops/tree/master
-terraform eks tutorial https://developer.hashicorp.com/terraform/tutorials/kubernetes/eks
+- kubernetes-mlops https://github.com/AlexIoannides/kubernetes-mlops/tree/master
+- terraform eks tutorial https://developer.hashicorp.com/terraform/tutorials/kubernetes/eks
