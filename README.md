@@ -8,7 +8,17 @@ An MLOps demo using Santander Product Recommendation Kaggle Competition Dataset.
 - The task is relatively simple (multi class classification)
 - The data are relatively messy and in Spanish, so it is close to real world scenarios.
 
+# Rule
+- Please notify which task you work on to everyone
+- Task with one indentation: ask Yasuto before starting 
+- Task with two indentations: you don't need to ask me, but please share results
+- Start with the smalles computations to save cloud cost (e.g.don't process all the data, don't do thorough grid search)
+- Suggest any necessary tasks if you think it's needed, and make them into small pieces and write in the TODO list. 
+- Be open to any questions on issues
 # TODO
+- EDA
+  - [ ] EDA ノートの修正、翻訳
+  - [ ] Connecting notebook with a database for ad hoc analysis. 
 - Database
   - [ ] Making a database project
   - [ ] Writing a script to sequentially uploading monthly records to the database (maybe with SQLAlchemy)
@@ -53,6 +63,13 @@ An MLOps demo using Santander Product Recommendation Kaggle Competition Dataset.
     - [ ] Deploying the visualisation
     - [ ] Enable uploading files from local to the UI
 
+
+# Members and roles
+- Yasuto: 言い出しっぺ（２年前から）。マネージャー。基本何でもやる。現無職。
+- Takumi: Fujitsu. Kubernetes要因。
+- (Potentially) Rikuya: Yahoo.
+
+皆さんの参加待っています。
 
 ### Reference：
 * [Santander Product Recommendation](https://www.kaggle.com/c/santander-product-recommendation)
