@@ -1,4 +1,8 @@
 # Santander MLOps Demo 
+
+![Alt text](images/santander_mlops_design.png?raw=true "Course schedule")
+
+
 An MLOps demo using Santander Product Recommendation Kaggle Competition Dataset. I chose the dataset for the following reasong. 
 - There are relatively a good amount of data (13647309 rows for training data, 929615 rows for test data)
 - The task is relatively simple (multi class classification)
