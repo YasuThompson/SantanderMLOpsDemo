@@ -5,11 +5,11 @@
 ### Download the required data from Kaggle and place it in the correct path, then train and create submission files with the following commands:
 
 ```sh
-mkdir ./santander_dir/model
+mkdir ./model_training/model
 ```
 
 ```sh
-python ./santander_dir/baseline_book.py
+python ./model_training/baseline_book.py
 ```
 
 ## Reference
