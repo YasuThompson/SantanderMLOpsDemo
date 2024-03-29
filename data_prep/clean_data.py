@@ -18,10 +18,10 @@ def read_lists_from_yaml(file_path):
         return data
 
 
-def clean_data_pandas(df):
+def clean_data_pandas(df, data_config_path='data_prep_config.yaml'):
 
     # Getting some column names and their mappings from a yaml file
-    config_dict = read_lists_from_yaml('data_prep/data_prep_config.yaml')
+    config_dict = read_lists_from_yaml(data_config_path)
 
     column_map_dict = config_dict['col_name_map_dict'] # A dictionary mapping column names
     target_cols = config_dict['target_cols'] # Target columns to predict
