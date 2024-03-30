@@ -1,5 +1,8 @@
-# Target columns to predict
-product_columns:
+customer_id:
+  ncodpers
+key_timestamp:
+  fecha_dato
+product_columns: # Target columns to predict
   - "ind_ahor_fin_ult1"
   - "ind_aval_fin_ult1"
   - "ind_cco_fin_ult1"
@@ -24,16 +27,6 @@ product_columns:
   - "ind_nomina_ult1"
   - "ind_nom_pens_ult1"
   - "ind_recibo_ult1"
-
-#num_column_dict:
-#  'age': int8
-#  'antiguedad': int8
-#  'renta': float
-#  'ind_nuevo': int8
-#  'indrel': int8
-#  'indrel_1mes': int8
-#  'ind_actividad_cliente': int8
-
 numeric_columns:
   - 'age'
   - 'antiguedad'
@@ -42,7 +35,6 @@ numeric_columns:
   - 'indrel'
   - 'indrel_1mes'
   - 'ind_actividad_cliente'
-
 categorical_columns:
   - 'ind_empleado'
   - 'pais_residencia'
@@ -56,12 +48,10 @@ categorical_columns:
   - 'tipodom'
   - 'nomprov'
   - 'segmento'
-
 date_columns:
   - "fecha_dato"
   - "fecha_alta"
   - "ult_fec_cli_1t"
-
 # Mapping column names from Spanish to English
 col_name_map_dict:
   fecha_dato: date
