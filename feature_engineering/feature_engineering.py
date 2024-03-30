@@ -33,7 +33,6 @@ def data_engineering(df, config_dict):
 
     # (Feature engineering) label encoding
     # Convert date columns to datetime objects
-
     # Extract year and month information
     df['first_holder_date_month'] = df['first_holder_date'].apply(safe_convert_to_month).astype(np.int8)
     df['first_holder_date_year'] = df['first_holder_date'].apply(safe_convert_to_year).astype(np.int16)
@@ -71,20 +70,29 @@ def data_engineering(df, config_dict):
 
     return df
 
-def label_data(df):
+def label_data(df, config_dict):
     pass
-    # # 訓練データから新規購買件数だけを抽出します。
-    # X = []
-    # Y = []
-    # for i, prod in enumerate(prod_cols):
-    #     prev = prod + '_prev'
-    #     prX = trn[(trn[prod] == 1) & (trn[prev] == 0)]
-    #     prY = np.zeros(prX.shape[0], dtype=np.int8) + i
-    #     X.append(prX)
-    #     Y.append(prY)
-    # XY = pd.concat(X)
-    # Y = np.hstack(Y)
-    # XY['y'] = Y
+    # 訓練データから新規購買件数だけを抽出します。
+    X = []
+    Y = []
+
+    df['y'] = np.nan
+
+    for i, prod in enumerate(config_dict['product_columns']):
+        prev = prod + '_prev'
+
+        index_extracted = (df[prod] == 1) & (df[prev] == 0)
+        df[index_extracted]['y'] = i
+
+        prX = df[index_extracted]
+        prY = np.zeros(prX.shape[0], dtype=np.int8) + i
+        X.append(prX)
+        Y.append(prY)
+    XY = pd.concat(X)
+    Y = np.hstack(Y)
+    XY['y'] = Y
+
+    return df, XY
 
 
 
@@ -95,7 +103,9 @@ if __name__ == '__main__':
 
     config_dict = read_lists_from_yaml(data_config_path)
 
-    save_path = 'feature_engineering/train_feature_engineered_small.csv'
+    save_path_feature_engineered = 'feature_engineering/train_feature_engineered_small.csv'
+    save_path_labeled = 'feature_engineering/train_labeled_small.csv'
+    save_path_labeled_debug = 'feature_engineering/train_labeled_small_debug.csv'
 
     if data_source=='csv':
         print("Loading data from csv files")
@@ -104,6 +114,8 @@ if __name__ == '__main__':
         print("Feature engineering")
         df_feature_engineered = data_engineering(df_train, config_dict)
 
-        # df_feature_engineered = label_data(df_feature_engineered)
+        df_labeled, XY = label_data(df_feature_engineered, config_dict)
 
-        df_feature_engineered.to_csv(save_path, index=False)
+        df_feature_engineered.to_csv(save_path_feature_engineered, index=False)
+        df_labeled.to_csv(save_path_labeled, index=False)
+        XY.to_csv(save_path_labeled_debug, index=False)
