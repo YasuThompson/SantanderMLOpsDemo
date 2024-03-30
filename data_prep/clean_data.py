@@ -9,7 +9,9 @@ def take_value_dict(key, dict):
         return key
 
 def load_local_data(csv_path):
-    return pd.read_csv(csv_path, sep=',', low_memory=False)
+    df =  pd.read_csv(csv_path, sep=',', low_memory=False)
+    df = df.drop('Unnamed: 0', axis=1)
+    return df
 
 
 def read_lists_from_yaml(file_path):
@@ -36,10 +38,6 @@ def clean_num_element(x, replace_val=-99):
                 replaced_value = float(x)
             except:
                 replaced_value = replace_val
-
-
-
-    # print('(x, replaced_value): {}'.format((x, replaced_value)))
 
     return replaced_value
 
