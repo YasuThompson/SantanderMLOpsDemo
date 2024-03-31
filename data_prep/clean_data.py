@@ -55,6 +55,8 @@ def clean_data_pandas(df, config_dict):
 
     # Renaming columns
     config_dict_cleaned = {}
+    config_dict_cleaned['customer_id'] = take_value_dict(config_dict['customer_id'], column_map_dict)
+    config_dict_cleaned['key_timestamp'] = take_value_dict(config_dict['key_timestamp'], column_map_dict)
     config_dict_cleaned['numeric_columns'] = [take_value_dict(col, column_map_dict) for col in config_dict['numeric_columns']]
     config_dict_cleaned['categorical_columns'] = [take_value_dict(col, column_map_dict) for col in config_dict['categorical_columns']]
     config_dict_cleaned['date_columns'] = [take_value_dict(col, column_map_dict) for col in config_dict['date_columns']]
