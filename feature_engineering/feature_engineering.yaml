@@ -1,94 +1,133 @@
-date_encoding:
-  engineered_features:
-  - date_year
-  - date_month
-  - first_holder_date_year
-  - first_holder_date_month
-  - primary_last_date_year
-  - primary_last_date_month
-  input_features:
-  - date
-  - first_holder_date
-  - primary_last_date
-label_encoding:
-  engineered_features:
-  - employee_index_encoded
-  - country_encoded
-  - sex_encoded
-  - customer_relation_type_encoded
-  - residence_index_encoded
-  - foreigner_index_encoded
-  - spouse_index_encoded
-  - channel_encoded
-  - deceased_index_encoded
-  - addres_type_encoded
-  - province_name_encoded
-  - segmentation_encoded
-  input_features:
-  - employee_index
-  - country
-  - sex
-  - customer_relation_type
-  - residence_index
-  - foreigner_index
-  - spouse_index
-  - channel
-  - deceased_index
-  - addres_type
-  - province_name
-  - segmentation
-lag_1:
-  engineered_features:
-  - saving_account_lag_1
-  - guarantees_lag_1
-  - current_accounts_lag_1
-  - derivada_account_lag_1
-  - payroll_account_lag_1
-  - junior_account_lag_1
-  - mas_particular_account_lag_1
-  - particular_account_lag_1
-  - particular_plus_account_lag_1
-  - short_term_deposit_lag_1
-  - medium_term_deposit_lag_1
-  - long_term_deposit_lag_1
-  - e_account_lag_1
-  - funds_lag_1
-  - mortgage_lag_1
-  - pensions_lag_1
-  - loans_lag_1
-  - taxes_lag_1
-  - credit_card_lag_1
-  - securities_lag_1
-  - home_account_lag_1
-  - payroll_lag_1
-  - pensions_2_lag_1
-  - direct_debit_lag_1
-  input_features:
-  - date
-  - customer_code
-  - saving_account
-  - guarantees
-  - current_accounts
-  - derivada_account
-  - payroll_account
-  - junior_account
-  - mas_particular_account
-  - particular_account
-  - particular_plus_account
-  - short_term_deposit
-  - medium_term_deposit
-  - long_term_deposit
-  - e_account
-  - funds
-  - mortgage
-  - pensions
-  - loans
-  - taxes
-  - credit_card
-  - securities
-  - home_account
-  - payroll
-  - pensions_2
-  - direct_debit
-  parameters:
-    lag_size: 1
+categorical_columns: &id002
+- employee_index
+- country
+- sex
+- customer_relation_type
+- residence_index
+- foreigner_index
+- spouse_index
+- channel
+- deceased_index
+- addres_type
+- province_name
+- segmentation
+customer_id: customer_code
+date_columns: &id001
+- date
+- first_holder_date
+- primary_last_date
+feature_engineering:
+  date_encoding:
+    engineered_features:
+    - date_year
+    - date_month
+    - first_holder_date_year
+    - first_holder_date_month
+    - primary_last_date_year
+    - primary_last_date_month
+    input_features: *id001
+  label_encoding:
+    engineered_features:
+    - employee_index_encoded
+    - country_encoded
+    - sex_encoded
+    - customer_relation_type_encoded
+    - residence_index_encoded
+    - foreigner_index_encoded
+    - spouse_index_encoded
+    - channel_encoded
+    - deceased_index_encoded
+    - addres_type_encoded
+    - province_name_encoded
+    - segmentation_encoded
+    input_features: *id002
+  lag_1:
+    engineered_features:
+    - saving_account_lag_1
+    - guarantees_lag_1
+    - current_accounts_lag_1
+    - derivada_account_lag_1
+    - payroll_account_lag_1
+    - junior_account_lag_1
+    - mas_particular_account_lag_1
+    - particular_account_lag_1
+    - particular_plus_account_lag_1
+    - short_term_deposit_lag_1
+    - medium_term_deposit_lag_1
+    - long_term_deposit_lag_1
+    - e_account_lag_1
+    - funds_lag_1
+    - mortgage_lag_1
+    - pensions_lag_1
+    - loans_lag_1
+    - taxes_lag_1
+    - credit_card_lag_1
+    - securities_lag_1
+    - home_account_lag_1
+    - payroll_lag_1
+    - pensions_2_lag_1
+    - direct_debit_lag_1
+    input_features:
+    - date
+    - customer_code
+    - saving_account
+    - guarantees
+    - current_accounts
+    - derivada_account
+    - payroll_account
+    - junior_account
+    - mas_particular_account
+    - particular_account
+    - particular_plus_account
+    - short_term_deposit
+    - medium_term_deposit
+    - long_term_deposit
+    - e_account
+    - funds
+    - mortgage
+    - pensions
+    - loans
+    - taxes
+    - credit_card
+    - securities
+    - home_account
+    - payroll
+    - pensions_2
+    - direct_debit
+    parameters:
+      lag_size: 1
+key_timestamp: date
+label_column: y
+numeric_columns:
+- age
+- customer_seniority
+- household_gross_income
+- new_customer_index
+- primary_index
+- customer_type
+- activity_index
+product_columns:
+- saving_account
+- guarantees
+- current_accounts
+- derivada_account
+- payroll_account
+- junior_account
+- mas_particular_account
+- particular_account
+- particular_plus_account
+- short_term_deposit
+- medium_term_deposit
+- long_term_deposit
+- e_account
+- funds
+- mortgage
+- pensions
+- loans
+- taxes
+- credit_card
+- securities
+- home_account
+- payroll
+- pensions_2
+- direct_debit

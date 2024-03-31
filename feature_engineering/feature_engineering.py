@@ -162,13 +162,11 @@ def data_engineering(df, config_dict):
 
     return df, feat_eng_dict
 
-def label_data(df, config_dict):
+def label_data(df, config_dict, label_column='y'):
     pass
-    # 訓練データから新規購買件数だけを抽出します。
+    # Ex
     X = []
     Y = []
-
-    # df['y'] = ''
 
     for i, prod in enumerate(config_dict['product_columns']):
         prev = prod + '_prev'
@@ -182,7 +180,7 @@ def label_data(df, config_dict):
         Y.append(prY)
     XY = pd.concat(X)
     Y = np.hstack(Y)
-    XY['y'] = Y
+    XY[label_column] = Y
 
     return XY
 
@@ -190,15 +188,15 @@ def label_data(df, config_dict):
 
 if __name__ == '__main__':
     data_source = 'csv'
-    train_path = 'data_prep/train_cleaned_small.csv'
-    data_config_path = 'data_prep/data_prep_config_cleaned.yaml'
+    train_path = '../data_prep/train_cleaned_small.csv'
+    data_config_path = '../data_prep/data_prep_config_cleaned.yaml'
 
     config_dict = read_lists_from_yaml(data_config_path)
 
-    save_path_feature_engineered = 'feature_engineering/train_feature_engineered_small.csv'
-    save_path_labeled = 'feature_engineering/train_labeled_small.csv'
-    save_path_labeled_debug = 'feature_engineering/train_labeled_small_debug.csv'
-    config_save_path = 'feature_engineering/feature_engineering.yaml'
+    save_path_feature_engineered = 'train_feature_engineered_small.csv'
+    save_path_labeled = 'train_labeled_small.csv'
+    # save_path_labeled_debug = 'train_labeled_small_debug.csv'
+    config_save_path = 'feature_engineering.yaml'
 
     if data_source=='csv':
         print("Loading data from csv files")
@@ -207,11 +205,16 @@ if __name__ == '__main__':
         print("Feature engineering")
         df_feature_engineered, feat_eng_dict = data_engineering(df_train, config_dict)
 
-        XY = label_data(df_feature_engineered, config_dict)
+        label_column = 'y'
+        XY = label_data(df_feature_engineered, config_dict, label_column=label_column)
+        config_dict['label_column'] = label_column
 
         df_feature_engineered.to_csv(save_path_feature_engineered, index=False)
         # df_labeled.to_csv(save_path_labeled, index=False)
-        XY.to_csv(save_path_labeled_debug, index=False)
+        XY.to_csv(save_path_labeled, index=False)
+
+        config_dict['feature_engineering'] = feat_eng_dict
+
 
         with open(config_save_path, 'w') as file:
-            yaml.dump(feat_eng_dict, file)
+            yaml.dump(config_dict, file)
