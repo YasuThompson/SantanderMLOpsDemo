@@ -7,7 +7,7 @@ An MLOps demo using Santander Product Recommendation Kaggle Competition Dataset.
 - There are relatively a good amount of data (13647309 rows for training data, 929615 rows for test data)
 - The task is relatively simple (multi class classification)
 - The data are relatively messy and in Spanish, so it is close to real world scenarios.
-- Data science part is not really the point this time, so let's not elaborate models and their trainings in the begiining. 
+- **Data science part is not really the point this time,** so let's not elaborate models and their trainings in the beginning. 
 
 # Rule
 - Please notify which task you work on to everyone
@@ -97,7 +97,7 @@ cd ..
 
 # Members and roles
 - Yasuto: 言い出しっぺ（２年前から）。マネージャー。基本何でもやる。現無職。
-- Takumi: Fujitsu. Kubernetes要因。
+- Takumi: Fujitsu. Kubernetes要員。
 - (Potentially) Rikuya: Yahoo.
 
 皆さんの参加待っています。
