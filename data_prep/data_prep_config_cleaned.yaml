@@ -11,10 +11,12 @@ categorical_columns:
 - addres_type
 - province_name
 - segmentation
+customer_id: customer_code
 date_columns:
 - date
 - first_holder_date
 - primary_last_date
+key_timestamp: date
 numeric_columns:
 - age
 - customer_seniority
