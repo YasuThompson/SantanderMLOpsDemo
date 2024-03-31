@@ -7,7 +7,7 @@ An MLOps demo using Santander Product Recommendation Kaggle Competition Dataset.
 - There are relatively a good amount of data (13647309 rows for training data, 929615 rows for test data)
 - The task is relatively simple (multi class classification)
 - The data are relatively messy and in Spanish, so it is close to real world scenarios.
-- Data science part is not really the point this time, so let's not elaborate models. 
+- Data science part is not really the point this time, so let's not elaborate models and their trainings in the begiining. 
 
 # Rule
 - Please notify which task you work on to everyone
@@ -19,7 +19,18 @@ An MLOps demo using Santander Product Recommendation Kaggle Competition Dataset.
 
 # (Starting point) how to run locally 
 ## 1. Data preparation
+Download the dataset from [Santander Product Recommendation Kaggle competition page](https://www.kaggle.com/c/santander-product-recommendation) and place them in `data` directory. And run the following
+```
+cd data_prep
+python training/clean_data.py 
+cd ..
+```
 ## 2. Feature enginering
+```
+cd feature_engineering
+python feature_engineering.py 
+cd ..
+```
 ## 3. Model training 
 ## 4. Inference
 
@@ -29,7 +40,7 @@ An MLOps demo using Santander Product Recommendation Kaggle Competition Dataset.
   - [x] Data cleaning 
   - [ ] Feature engineering
     - [x] Finishing basic script
-    - [ ] Defining features in declarative ways
+    - [x] Defining features in declarative ways
   - [ ] Model training
       - [ ] Finishing the basic script
       - [ ] Cross validation
