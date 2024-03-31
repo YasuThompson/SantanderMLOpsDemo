@@ -25,12 +25,12 @@ class FeatureEngineering:
 
     def get_feat_eng_dict(self):
 
-        if self.input_features is None or self.output_features is None:
+        if self.input_features is None or self.engineered_features is None:
             raise ValueError("Inputs and outputs of the feature engineering must be specified")
         else:
             feat_eng_dict = {
                 'input_features': self.input_features,
-                'engineered_features': self.output_features
+                'engineered_features': self.engineered_features
             }
 
             if self.param_dict is not None:
@@ -43,12 +43,13 @@ class FeatureEngineering:
 
 
 class FeatEngLabelEncoding(FeatureEngineering):
-    def __init__(self, input_features):
-        super().__init__(input_features)
+    def __init__(self):
+        super().__init__()
 
 
     def apply_feat_eng(self, df, input_features):
         self.input_features = input_features
+        self.engineered_features = []
         for col in self.input_features:
             col_engineered = '{}_encoded'.format(col)
             df[col_engineered], _ = df[col].factorize()
@@ -75,6 +76,7 @@ class FeatEngDateEncoding(FeatureEngineering):
 
     def apply_feat_eng(self, df, input_features):
         self.input_features = input_features
+        self.engineered_features = []
 
         for col in input_features:
             month_col_engineered = '{}_month'.format(col)
@@ -106,7 +108,9 @@ class FeatEngLag(FeatureEngineering):
 
         # Copy the data, add 1 to the integer date, and generate lag. Add '_prev' to the variable name.
         df_lag = df.copy()
-        df_lag = df_lag[lag_features]
+        df_lag = df_lag[[customer_id_column, 'int_date'] + lag_features ]
+        for col in lag_features:
+            df_lag = df_lag.rename(columns={col: col + '_prev'})
         df_lag['int_date'] += 1
 
         # 原本データと lag データを ncodperと int_date を基準として合わせます。lag データの int_dateは 1 だけ押されているため、前の月の製品情報が挿入されます。
@@ -129,15 +133,22 @@ class FeatEngLag(FeatureEngineering):
 
 def data_engineering(df, config_dict):
 
+    feat_eng_dict = {}
+
     # (Feature engineering) label encoding
     label_encoder = FeatEngLabelEncoding()
-    df = label_encoder(df, config_dict['categorical_columns'])
+    df = label_encoder.apply_feat_eng(df, config_dict['categorical_columns'])
+    feat_eng_dict['label_encoding'] = label_encoder.get_feat_eng_dict()
 
     # (Feature engineering) date encoding
-    date_encoder = FeatEngLabelEncoding()
-    df = date_encoder(df, config_dict['date_columns'])
+    date_encoder = FeatEngDateEncoding()
+    df = date_encoder.apply_feat_eng(df, config_dict['date_columns'])
+    feat_eng_dict['date_encoding'] = date_encoder.get_feat_eng_dict()
 
     lag_calculator = FeatEngLag()
+    date_column = config_dict['key_timestamp']
+    customer_id_column = config_dict['customer_id']
+    lag_features = config_dict['product_columns']
     lag_size = 1
     df = lag_calculator.apply_feat_eng(df,
                                        date_column,
@@ -146,8 +157,10 @@ def data_engineering(df, config_dict):
                                        lag_size
                                        )
 
+    feat_eng_dict['lag_1'] = lag_calculator.get_feat_eng_dict()
 
-    return df
+
+    return df, feat_eng_dict
 
 def label_data(df, config_dict):
     pass
@@ -185,16 +198,20 @@ if __name__ == '__main__':
     save_path_feature_engineered = 'feature_engineering/train_feature_engineered_small.csv'
     save_path_labeled = 'feature_engineering/train_labeled_small.csv'
     save_path_labeled_debug = 'feature_engineering/train_labeled_small_debug.csv'
+    config_save_path = 'feature_engineering/feature_engineering.yaml'
 
     if data_source=='csv':
         print("Loading data from csv files")
         df_train = load_local_data(train_path)
 
         print("Feature engineering")
-        df_feature_engineered = data_engineering(df_train, config_dict)
+        df_feature_engineered, feat_eng_dict = data_engineering(df_train, config_dict)
 
         XY = label_data(df_feature_engineered, config_dict)
 
         df_feature_engineered.to_csv(save_path_feature_engineered, index=False)
         # df_labeled.to_csv(save_path_labeled, index=False)
         XY.to_csv(save_path_labeled_debug, index=False)
+
+        with open(config_save_path, 'w') as file:
+            yaml.dump(feat_eng_dict, file)
