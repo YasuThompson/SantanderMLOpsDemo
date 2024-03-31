@@ -1,0 +1,25 @@
+train_dates:
+  - '2015-01-28'
+  - '2015-02-28'
+  - '2015-03-28'
+
+val_dates:
+  - '2015-03-28'
+
+test_dates:
+  - '2016-06-28'
+
+parameters:
+  booster: "gbtree"
+  max_depth: 8
+  nthread: 4
+  num_class: 24
+  objective: "multi:softprob"
+  silent: 1
+  eval_metric: "mlogloss"
+  eta: 0.1
+  min_child_weight: 10
+  colsample_bytree: 0.8
+  colsample_bylevel: 0.9
+  seed: 2018
+  verbosity: 0
