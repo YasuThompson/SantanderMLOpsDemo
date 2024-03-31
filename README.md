@@ -7,6 +7,7 @@ An MLOps demo using Santander Product Recommendation Kaggle Competition Dataset.
 - There are relatively a good amount of data (13647309 rows for training data, 929615 rows for test data)
 - The task is relatively simple (multi class classification)
 - The data are relatively messy and in Spanish, so it is close to real world scenarios.
+- Data science part is not really the point this time, so let's not elaborate models. 
 
 # Rule
 - Please notify which task you work on to everyone
@@ -15,7 +16,26 @@ An MLOps demo using Santander Product Recommendation Kaggle Competition Dataset.
 - Start with the smalles computations to save cloud cost (e.g.don't process all the data, don't do thorough grid search)
 - Suggest any necessary tasks if you think it's needed, and make them into small pieces and write in the TODO list. 
 - Be open to any questions on issues
+
+# (Starting point) how to run locally 
+## 1. Data preparation
+## 2. Feature enginering
+## 3. Model training 
+## 4. Inference
+
+
 # TODO
+- To make a local workflow
+  - [x] Data cleaning 
+  - [ ] Feature engineering
+    - [x] Finishing basic script
+    - [ ] Defining features in declarative ways
+  - [ ] Model training
+      - [ ] Finishing the basic script
+      - [ ] Cross validation
+      - [ ] Implementing general ML class both for scikit-learn and XGBoost
+      - [ ] Simple grid search
+  - [ ] Inference
 - EDA
   - [ ] EDA ノートの修正、翻訳
   - [ ] Connecting notebook with a database for ad hoc analysis. 
