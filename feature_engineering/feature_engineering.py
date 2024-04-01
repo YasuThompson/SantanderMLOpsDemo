@@ -120,13 +120,14 @@ class FeatEngLag(FeatureEngineering):
 
         # 前の月の製品情報が存在しない場合に備えて、0に代替します。
         for col in lag_features:
-            prev = col + '_prev'
+            # prev = col + '_prev'
+            prev = '{}_prev'.format(col)
             df[prev] = df[prev].fillna(0)
 
         # TODO: we might need different type of filling based on lag columns
         # df = df.fillna(-99)
 
-        self.engineered_features = ['{}_lag_{}'.format(col, lag_size) for col in lag_features]
+        self.engineered_features = ['{}_prev'.format(col) for col in lag_features]
         self.param_dict = {'lag_size': lag_size}
 
         return df
