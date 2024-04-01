@@ -5,9 +5,6 @@ from joblib import dump
 from multiclass_classifier import RandomForestClassifier, XGBoostClassifier
 from sklearn.metrics import classification_report
 
-
-
-
 def load_local_data(csv_path):
     return pd.read_csv(csv_path, sep=',', low_memory=False)
 
@@ -53,7 +50,7 @@ def feature_selection(config_dict):
     
 if __name__ == '__main__':
 
-    dataset_path = '../feature_engineering/train_labeled_small.csv'
+    dataset_path = '../feature_engineering/train_labeled.csv'
     df_dataset = load_local_data(dataset_path)
 
     data_config_path = '../feature_engineering/feature_engineering.yaml'
@@ -75,10 +72,6 @@ if __name__ == '__main__':
                                               y_feature
                                   )
 
-    multiclass_clf = RandomForestClassifier(
-        # params=training_config_dict['random_forest_parameters']
-    )
-
     multiclass_clf = XGBoostClassifier(
         # params=training_config_dict['random_forest_parameters']
     )
@@ -86,11 +79,10 @@ if __name__ == '__main__':
     # Train and evaluate RandomForestClassifier
     multiclass_clf.fit(X_trn, X_vld, Y_trn, Y_vld)
 
-    # Evaluation
+    # Evaluation on validation dataset
     rf_pred = multiclass_clf.predict(X_vld)
-    print("Random Forest Classifier Report:")
+    print("Classifier Report:")
     print(classification_report(Y_vld, rf_pred))
-
 
     dump(multiclass_clf, model_save_path)
 
