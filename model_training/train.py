@@ -1,8 +1,10 @@
 import yaml
 import pandas as pd
+from joblib import dump
 
 from multiclass_classifier import RandomForestClassifier, XGBoostClassifier
 from sklearn.metrics import classification_report
+
 
 
 
@@ -15,8 +17,6 @@ def read_lists_from_yaml(file_path):
         return data
 
 def take_data_pd(df, key_timestamp_column, trn_dates, val_dates, x_features, y_feature):
-
-
     # 訓練、検証データに分離します。
     XY_trn = df[df[key_timestamp_column].isin(trn_dates)]
     XY_vld = df[df[key_timestamp_column].isin(val_dates)]
@@ -64,8 +64,6 @@ if __name__ == '__main__':
 
     model_save_path = 'sample_model.joblib'
 
-
-
     x_features = feature_selection(feature_eng_config_dict)
     y_feature = 'y'
 
@@ -85,21 +83,14 @@ if __name__ == '__main__':
         # params=training_config_dict['random_forest_parameters']
     )
 
-    # Standardizing features
-    multiclass_clf.set_scaler(X_trn)
-    X_train_scaled = multiclass_clf.scale_data(X_trn)
-    X_val_scaled = multiclass_clf.scale_data(X_vld)
-
     # Train and evaluate RandomForestClassifier
-    multiclass_clf.fit(X_train_scaled, X_val_scaled, Y_trn, Y_vld)
-
-
+    multiclass_clf.fit(X_trn, X_vld, Y_trn, Y_vld)
 
     # Evaluation
-    rf_pred = multiclass_clf.predict(X_val_scaled)
+    rf_pred = multiclass_clf.predict(X_vld)
     print("Random Forest Classifier Report:")
     print(classification_report(Y_vld, rf_pred))
 
-    multiclass_clf.export_model(model_save_path)
 
-    pass
+    dump(multiclass_clf, model_save_path)
+
