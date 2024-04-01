@@ -9,7 +9,7 @@ val_dates:
 test_dates:
   - '2016-06-28'
 
-parameters:
+xgboost_parameters:
   booster: "gbtree"
   max_depth: 8
   nthread: 4
@@ -23,3 +23,6 @@ parameters:
   colsample_bylevel: 0.9
   seed: 2018
   verbosity: 0
+
+random_forest_parameters:
+  n_estimators: 100
