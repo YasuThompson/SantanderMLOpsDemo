@@ -31,7 +31,12 @@ cd feature_engineering
 python feature_engineering.py 
 cd ..
 ```
-## 3. Model training 
+## 3. Model training
+```
+cd model_training
+python train.py 
+cd ..
+```
 ## 4. Inference
 
 
