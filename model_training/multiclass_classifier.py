@@ -5,9 +5,6 @@ from sklearn.model_selection import train_test_split
 # from sklearn.preprocessing import StandardScaler
 from sklearn.metrics import classification_report
 
-from joblib import dump
-from joblib import load
-
 from mapk import mapk
 
 
@@ -25,30 +22,6 @@ class BaseMultiClassClassifier(ABC):
     @abstractmethod
     def predict(self, X):
         pass
-
-    def set_scaler(self, x_trn, scaler_type='standard'):
-        if scaler_type=='standard':
-            from sklearn.preprocessing import StandardScaler
-            self.scaler = StandardScaler()
-
-        self.scaler.fit(x_trn)
-
-
-    def scale_data(self, x):
-        return self.scaler.transform(x)
-
-    def score(self, X, y):
-        """
-        Calculates mean average precision
-        :param X:
-        :param y:
-        :return:
-        """
-        return mapk(y, self.predict(X))
-
-    def export_model(self, model_save_path):
-        dump(self.model, model_save_path)
-
 
 class XGBoostClassifier(BaseMultiClassClassifier):
     def __init__(self, xgb_params=None):
