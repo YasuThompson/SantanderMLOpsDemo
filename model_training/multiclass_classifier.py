@@ -1,10 +1,23 @@
 from abc import ABC, abstractmethod
 from sklearn.metrics import accuracy_score
-from sklearn.datasets import load_wine
+from sklearn.datasets import load_wine, load_breast_cancer
 from sklearn.model_selection import train_test_split
-from sklearn.preprocessing import StandardScaler
+# from sklearn.preprocessing import StandardScaler
 from sklearn.metrics import classification_report
+
+from joblib import dump
+from joblib import load
+
+from mapk import mapk
+
+
 class BaseMultiClassClassifier(ABC):
+    # TODO: Don't use pandas dataframe
+    def __init__(self, features):
+        self.features = features
+        self.weights = None
+        self.scaler = None
+
     @abstractmethod
     def fit(self, X, y):
         pass
@@ -13,8 +26,29 @@ class BaseMultiClassClassifier(ABC):
     def predict(self, X):
         pass
 
+    def set_scaler(self, x_trn, scaler_type='standard'):
+        if scaler_type=='standard':
+            from sklearn.preprocessing import StandardScaler
+            self.scaler = StandardScaler()
+
+        self.scaler.fit(x_trn)
+
+
+    def scale_data(self, x):
+        return self.scaler.transform(x)
+
     def score(self, X, y):
-        return accuracy_score(y, self.predict(X))
+        """
+        Calculates mean average precision
+        :param X:
+        :param y:
+        :return:
+        """
+        return mapk(y, self.predict(X))
+
+    def export_model(self, model_save_path):
+        dump(self.model, model_save_path)
+
 
 class XGBoostClassifier(BaseMultiClassClassifier):
     def __init__(self, xgb_params=None):
@@ -23,18 +57,14 @@ class XGBoostClassifier(BaseMultiClassClassifier):
         else:
             self.xgb_params = xgb_params
 
-    def fit(self, x_trn, y_trn, x_vld, y_vld):
+    def fit(self, x_trn, x_vld, y_trn, y_vld):
         import xgboost as xgb
+        self.model = xgb.XGBClassifier(early_stopping_rounds=1)
 
-        dtrn = xgb.DMatrix(x_trn, label=y_trn)
-        dvld = xgb.DMatrix(x_vld, label=y_vld)
-        watch_list = [(dtrn, 'train'), (dvld, 'eval')]
-        self.model = xgb.train(self.param,
-                               dtrn,
-                               num_boost_round=10,
-                               evals=watch_list,
-                               early_stopping_rounds=1)
-        self.model.fit(X, y)
+        self.model.fit(x_trn,
+                       y_trn,
+                       eval_set=[(x_vld, y_vld)],
+                       )
 
     def predict(self, X):
         return self.model.predict(X)
@@ -46,31 +76,16 @@ class RandomForestClassifier(BaseMultiClassClassifier):
         else:
             self.rf_params = rf_params
 
-    def fit(self, X, y):
+    def fit(self, x_trn, x_vld, y_trn, y_vld):
+        # TODO: to implement early stopping logic here
         from sklearn.ensemble import RandomForestClassifier
-        self.model = RandomForestClassifier(**self.rf_params)
-        self.model.fit(X, y)
+        self.model = RandomForestClassifier(n_estimators=100, random_state=42, verbose=1)
+        self.model.fit(x_trn, y_trn)
 
     def predict(self, X):
         return self.model.predict(X)
 
 
-
-class SVMClassifier(BaseMultiClassClassifier):
-    def __init__(self, svm_params=None):
-        super().__init__()
-        if svm_params is None:
-            self.svm_params = {}  # You can set default parameters here
-        else:
-            self.svm_params = svm_params
-
-    def fit(self, X, y):
-        from sklearn.svm import SVC
-        self.model = SVC(**self.svm_params)
-        self.model.fit(X, y)
-
-    def predict(self, X):
-        return self.model.predict(X)
 
 if __name__ == '__main__':
     # Load Iris dataset
@@ -81,34 +96,35 @@ if __name__ == '__main__':
     wine = load_wine()
     X, y = wine.data, wine.target
 
-    # # Load Breast Cancer dataset
-    # cancer = load_breast_cancer()
-    # X, y = cancer.data, cancer.target
+    # Load Breast Cancer dataset
+    cancer = load_breast_cancer()
+    X, y = cancer.data, cancer.target
 
     # Split the data into training and testing sets
-    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+    X_train, X_val , y_train, y_val = train_test_split(X, y, test_size=0.2, random_state=42)
 
-    # Standardize features
-    scaler = StandardScaler()
-    X_train_scaled = scaler.fit_transform(X_train)
-    X_test_scaled = scaler.transform(X_test)
-
+    # multiclass_clf = XGBoostClassifier()
+    # # Standardizing features
+    # multiclass_clf.set_scaler(X_train)
+    # X_train_scaled = multiclass_clf.scale_data(X_train)
+    # X_val_scaled = multiclass_clf.scale_data(X_val)
+    #
     # # Train and evaluate XGBoostClassifier
-    # xgb_clf = XGBoostClassifier()
-    # xgb_clf.fit(X_train_scaled, y_train)
-    # xgb_pred = xgb_clf.predict(X_test_scaled)
+    # multiclass_clf.fit(X_train_scaled, X_val_scaled, y_train, y_val)
+    # xgb_pred = multiclass_clf.predict(X_val_scaled)
     # print("XGBoost Classifier Report:")
-    # print(classification_report(y_test, xgb_pred))
+    # print(classification_report(y_val, xgb_pred))
+
+    multiclass_clf = RandomForestClassifier()
+    # Standardizing features
+    multiclass_clf.set_scaler(X_train)
+    X_train_scaled = multiclass_clf.scale_data(X_train)
+    X_val_scaled = multiclass_clf.scale_data(X_val)
 
     # Train and evaluate RandomForestClassifier
-    rf_clf = RandomForestClassifier()
-    rf_clf.fit(X_train_scaled, y_train)
-    rf_pred = rf_clf.predict(X_test_scaled)
+    multiclass_clf.fit(X_train_scaled, X_val_scaled, y_train, y_val)
+    rf_pred = multiclass_clf.predict(X_val_scaled)
     print("Random Forest Classifier Report:")
-    print(classification_report(y_test, rf_pred))
+    print(classification_report(y_val, rf_pred))
 
-    # svm_clf = SVMClassifier()
-    # svm_clf.fit(X_train, y_train)
-    # svm_pred = svm_clf.predict(X_test_scaled)
-    # print("Support Vector Machine Report:")
-    # print(classification_report(y_test, svm_pred))
+    pass
