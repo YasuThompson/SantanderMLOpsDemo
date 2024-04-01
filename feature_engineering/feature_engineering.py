@@ -189,14 +189,13 @@ def label_data(df, config_dict, label_column='y'):
 
 if __name__ == '__main__':
     data_source = 'csv'
-    train_path = '../data_prep/train_cleaned_small.csv'
+    train_path = '../data_prep/train_cleaned.csv'
     data_config_path = '../data_prep/data_prep_config_cleaned.yaml'
 
     config_dict = read_lists_from_yaml(data_config_path)
 
-    save_path_feature_engineered = 'train_feature_engineered_small.csv'
-    save_path_labeled = 'train_labeled_small.csv'
-    # save_path_labeled_debug = 'train_labeled_small_debug.csv'
+    save_path_feature_engineered = 'train_feature_engineered.csv'
+    save_path_labeled = 'train_labeled.csv'
     config_save_path = 'feature_engineering.yaml'
 
     if data_source=='csv':
