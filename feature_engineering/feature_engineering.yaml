@@ -43,30 +43,30 @@ feature_engineering:
     input_features: *id002
   lag_1:
     engineered_features:
-    - saving_account_lag_1
-    - guarantees_lag_1
-    - current_accounts_lag_1
-    - derivada_account_lag_1
-    - payroll_account_lag_1
-    - junior_account_lag_1
-    - mas_particular_account_lag_1
-    - particular_account_lag_1
-    - particular_plus_account_lag_1
-    - short_term_deposit_lag_1
-    - medium_term_deposit_lag_1
-    - long_term_deposit_lag_1
-    - e_account_lag_1
-    - funds_lag_1
-    - mortgage_lag_1
-    - pensions_lag_1
-    - loans_lag_1
-    - taxes_lag_1
-    - credit_card_lag_1
-    - securities_lag_1
-    - home_account_lag_1
-    - payroll_lag_1
-    - pensions_2_lag_1
-    - direct_debit_lag_1
+    - saving_account_prev
+    - guarantees_prev
+    - current_accounts_prev
+    - derivada_account_prev
+    - payroll_account_prev
+    - junior_account_prev
+    - mas_particular_account_prev
+    - particular_account_prev
+    - particular_plus_account_prev
+    - short_term_deposit_prev
+    - medium_term_deposit_prev
+    - long_term_deposit_prev
+    - e_account_prev
+    - funds_prev
+    - mortgage_prev
+    - pensions_prev
+    - loans_prev
+    - taxes_prev
+    - credit_card_prev
+    - securities_prev
+    - home_account_prev
+    - payroll_prev
+    - pensions_2_prev
+    - direct_debit_prev
     input_features:
     - date
     - customer_code
