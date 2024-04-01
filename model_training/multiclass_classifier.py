@@ -4,7 +4,8 @@ from sklearn.datasets import load_wine, load_breast_cancer
 from sklearn.model_selection import train_test_split
 # from sklearn.preprocessing import StandardScaler
 from sklearn.metrics import classification_report
-
+from sklearn.ensemble import RandomForestClassifier
+import xgboost as xgb
 from mapk import mapk
 
 
@@ -31,7 +32,6 @@ class XGBoostClassifier(BaseMultiClassClassifier):
             self.xgb_params = xgb_params
 
     def fit(self, x_trn, x_vld, y_trn, y_vld):
-        import xgboost as xgb
         self.model = xgb.XGBClassifier(early_stopping_rounds=1)
 
         self.model.fit(x_trn,
@@ -51,7 +51,7 @@ class RandomForestClassifier(BaseMultiClassClassifier):
 
     def fit(self, x_trn, x_vld, y_trn, y_vld):
         # TODO: to implement early stopping logic here
-        from sklearn.ensemble import RandomForestClassifier
+
         self.model = RandomForestClassifier(n_estimators=100, random_state=42, verbose=1)
         self.model.fit(x_trn, y_trn)
 
