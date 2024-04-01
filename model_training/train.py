@@ -1,100 +1,105 @@
+import yaml
 import pandas as pd
-import numpy as np
-import xgboost as xgb
-import pickle
 
-from process_data_santander import clean_data, data_engineering, split_data
-from load_local_data import load_local_data
-np.random.seed(2018)
+from multiclass_classifier import RandomForestClassifier, XGBoostClassifier
+from sklearn.metrics import classification_report
+
 
 
 def load_local_data(csv_path):
     return pd.read_csv(csv_path, sep=',', low_memory=False)
 
+def read_lists_from_yaml(file_path):
+    with open(file_path, 'r') as file:
+        data = yaml.safe_load(file)
+        return data
 
-def split_data(trn, features, val_dates, prod_cols):
-    # 訓練データから新規購買件数だけを抽出します。
-    X = []
-    Y = []
-    for i, prod in enumerate(prod_cols):
-        prev = prod + '_prev'
-        prX = trn[(trn[prod] == 1) & (trn[prev] == 0)]
-        prY = np.zeros(prX.shape[0], dtype=np.int8) + i
-        X.append(prX)
-        Y.append(prY)
-    XY = pd.concat(X)
-    Y = np.hstack(Y)
-    XY['y'] = Y
+def take_data_pd(df, key_timestamp_column, trn_dates, val_dates, x_features, y_feature):
+
 
     # 訓練、検証データに分離します。
-
-    # XY_trn = XY[XY['fecha_dato'] != vld_date]
-    # XY_vld = XY[XY['fecha_dato'] == vld_date]
-    XY_trn = XY[~XY['fecha_dato'].isin(val_dates)]
-    XY_vld = XY[XY['fecha_dato'].isin(val_dates)]
+    XY_trn = df[df[key_timestamp_column].isin(trn_dates)]
+    XY_vld = df[df[key_timestamp_column].isin(val_dates)]
 
     # 訓練、検証データを XGBoost 形態に変換します。
-    X_trn = XY_trn[features].values
-    Y_trn = XY_trn['y'].values
+    X_trn = XY_trn[x_features].values
+    Y_trn = XY_trn[y_feature].values
     # dtrn = xgb.DMatrix(X_trn, label=Y_trn, feature_names=features)
 
-    X_vld = XY_vld[features].values
-    Y_vld = XY_vld['y'].values
+    X_vld = XY_vld[x_features].values
+    Y_vld = XY_vld[y_feature].values
     # dvld = xgb.DMatrix(X_vld, label=Y_vld, feature_names=features)
 
     return X_trn, Y_trn, X_vld, Y_vld
 
-#def validate_with_map7():
-#    return 
 
-def main():
-    #### Phase 4 ####
-    # DATA SPLIT FOR CROSS VALIDATION. 
-    print("Splitting into training and validation data as Numpy arrays..")
-    X_trn, Y_trn, X_vld, Y_vld = split_data(trn, features, val_dates)
-    
-    
-    #### Phase 5 ####
-    # MODEL INITIALIZATION AND TRAINING. 
-    dtrn = xgb.DMatrix(X_trn, label=Y_trn, feature_names=features)
-    dvld = xgb.DMatrix(X_vld, label=Y_vld, feature_names=features)
-    watch_list = [(dtrn, 'train'), (dvld, 'eval')]
-    print("Training a model")
-    model = xgb.train(param, dtrn, num_boost_round=10, evals=watch_list, early_stopping_rounds=1)
-    
-    pickle.dump(model, open("./model/xgb.baseline.pkl", "wb"))
-    # best_ntree_limit = model.best_ntree_limit
+def feature_selection(config_dict):
+    """
+    Selects and returns features to use from engineered features
+    Currently just selects all the features and engineered features in the yaml file
+    # TODO: making a logic for selecting variables with high importance
+    :return:
+    """
 
-    #dall = xgb.DMatrix(X_all, label=Y_all, feature_names=features)
-    #best_ntree_limit = int(best_ntree_limit * (len(XY_trn) + len(XY_vld)) / len(XY_trn))
-    
-    print("Feature importance:")
-    for kv in sorted([(k,v) for k,v in model.get_fscore().items()], key=lambda kv: kv[1], reverse=True):
-        print(kv)
-        
-        
-    #### Phase 5 ####
-    # INFERENCE AND EVAULATION    
-    print("Inference on test data")    
-    X_tst = tst[features].values
-    dtst = xgb.DMatrix(X_tst, feature_names=features)
-    # preds_tst = model.predict(dtst, ntree_limit=best_ntree_limit)
-    preds_tst = model.predict(dtst)
-    ncodpers_tst = tst['ncodpers'].values
-    #preds_tst = preds_tst - tst.as_matrix(columns=[prod + '_prev' for prod in prods])
-    preds_tst = preds_tst - tst[[prod + '_prev' for prod in prods]].values
-    
-    print("Exporting results on test data")
-    submit_file = open('./model/xgb.baseline.2015-06-28', 'w')
-    submit_file.write('ncodpers,added_products\n')
-    for ncodper, pred in zip(ncodpers_tst, preds_tst):
-        y_prods = [(y,p,ip) for y,p,ip in zip(pred, prods, range(len(prods)))]
-        y_prods = sorted(y_prods, key=lambda a: a[0], reverse=True)[:7]
-        y_prods = [p for y,p,ip in y_prods]
-        submit_file.write('{},{}\n'.format(int(ncodper), ' '.join(y_prods)))
+    features_selected = []
+
+    features_selected += config_dict['numeric_columns'] # Using numeric varibles as they are
+
+    for feat_eng_type, temp_dict in config_dict['feature_engineering'].items():
+        features_selected += temp_dict['engineered_features']
+
+    return features_selected
 
     
 if __name__ == '__main__':
-    
-    main()
-    
+
+    dataset_path = '../feature_engineering/train_labeled_small.csv'
+    df_dataset = load_local_data(dataset_path)
+
+    data_config_path = '../feature_engineering/feature_engineering.yaml'
+    feature_eng_config_dict = read_lists_from_yaml(data_config_path)
+
+    data_config_path = 'training_config.yaml'
+    training_config_dict = read_lists_from_yaml(data_config_path)
+
+    model_save_path = 'sample_model.joblib'
+
+
+
+    x_features = feature_selection(feature_eng_config_dict)
+    y_feature = 'y'
+
+    X_trn, Y_trn, X_vld, Y_vld = take_data_pd(df_dataset,
+                                              feature_eng_config_dict['key_timestamp'],
+                                              training_config_dict['train_dates'],
+                                              training_config_dict['val_dates'],
+                                              x_features,
+                                              y_feature
+                                  )
+
+    multiclass_clf = RandomForestClassifier(
+        # params=training_config_dict['random_forest_parameters']
+    )
+
+    multiclass_clf = XGBoostClassifier(
+        # params=training_config_dict['random_forest_parameters']
+    )
+
+    # Standardizing features
+    multiclass_clf.set_scaler(X_trn)
+    X_train_scaled = multiclass_clf.scale_data(X_trn)
+    X_val_scaled = multiclass_clf.scale_data(X_vld)
+
+    # Train and evaluate RandomForestClassifier
+    multiclass_clf.fit(X_train_scaled, X_val_scaled, Y_trn, Y_vld)
+
+
+
+    # Evaluation
+    rf_pred = multiclass_clf.predict(X_val_scaled)
+    print("Random Forest Classifier Report:")
+    print(classification_report(Y_vld, rf_pred))
+
+    multiclass_clf.export_model(model_save_path)
+
+    pass
