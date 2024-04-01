@@ -1,7 +1,7 @@
 # Santander MLOps Demo 
 
-![Alt text](images/santander_mlops_design.png?raw=true "Course schedule")
-
+![Alt text](images/santander_mlops_design.png?raw=true "Overview")
+[More detailed overview can be found here.](https://miro.com/app/board/uXjVKaGxblU=/?share_link_id=865469751187) 
 
 An MLOps demo using Santander Product Recommendation Kaggle Competition Dataset. I chose the dataset for the following reasons. 
 - There are relatively a good amount of data (13647309 rows for training data, 929615 rows for test data)
@@ -78,6 +78,7 @@ cd ..
     - [ ] Kubeflow
     - [ ] Other general storage
 - Model serving
+  - [ ] (Survey) how do you preprocess test data when3 you inference?
   - [ ] Checking model serving options
     - [ ] MLflow 
     - [ ] Kubeflow
