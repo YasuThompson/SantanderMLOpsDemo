@@ -10,7 +10,6 @@ def take_value_dict(key, dict):
 
 def load_local_data(csv_path):
     df =  pd.read_csv(csv_path, sep=',', low_memory=False)
-    df = df.drop('Unnamed: 0', axis=1)
     return df
 
 
@@ -83,18 +82,18 @@ def clean_data_pandas(df, config_dict):
 
 if __name__ == '__main__':
     data_source = 'csv'
-    train_path = 'data/santander-product-recommendation/train_ver2_small.csv'
-    data_config_path = 'data_prep/data_prep_config.yaml'
+    train_path = '../data/santander-product-recommendation/train_ver2.csv'
+    data_config_path = 'data_prep_config.yaml'
 
-    data_save_path = 'data_prep/train_cleaned_small.csv'
-    config_save_path = 'data_prep/data_prep_config_cleaned.yaml'
+    data_save_path = 'train_cleaned.csv'
+    config_save_path = 'data_prep_config_cleaned.yaml'
 
     config_dict = read_lists_from_yaml(data_config_path)
 
     if data_source=='csv':
         print("Loading data from csv files")
         df_train = load_local_data(train_path)
-        print("Cleaninng data.")
+        print("Cleaning data.")
         df_cleaned, config_dict_cleaned = clean_data_pandas(df_train, config_dict)
 
         df_cleaned.to_csv(data_save_path, index=False)
