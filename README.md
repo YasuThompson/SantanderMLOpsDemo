@@ -118,12 +118,6 @@ UNDER  CONSTRUCTION
   * [この本](https://www.amazon.co.jp/Kaggle%E3%82%B3%E3%83%B3%E3%83%9A%E3%83%86%E3%82%A3%E3%82%B7%E3%83%A7%E3%83%B3-%E3%83%81%E3%83%A3%E3%83%AC%E3%83%B3%E3%82%B8%E3%83%96%E3%83%83%E3%82%AF-Jung-Kweon-Woo/dp/4839968934)を中古で買ってもいいかも
 
 
-
-# Members and roles
-- Yasuto: 言い出しっぺ（２年前から）。マネージャー。基本何でもやる。現無職。
-- Takumi: Fujitsu. Kubernetes要員。
-- (Potentially) Rikuya: Yahoo.
-
 皆さんの参加待っています。
 
 ### Reference：
