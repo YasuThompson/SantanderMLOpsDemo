@@ -47,8 +47,9 @@ UNDER  CONSTRUCTION
   - [ ] Feature engineering
     - [x] Finishing basic script
     - [x] Defining features in declarative ways
+    - [ ] Adding more feature engineering
   - [ ] Model training
-      - [ ] Finishing the basic script
+      - [x] Finishing the basic script
       - [ ] Cross validation
       - [ ] Implementing general ML class both for scikit-learn and XGBoost
       - [ ] Simple grid search
@@ -57,13 +58,17 @@ UNDER  CONSTRUCTION
   - [ ] EDA ノートの修正、翻訳
   - [ ] Connecting notebook with a database for ad hoc analysis. 
 - Database
-  - [ ] Making a database project
+  - [x] Making a database project
   - [ ] Writing a script to sequentially uploading monthly records to the database (maybe with SQLAlchemy)
+    - [x] SQLAlchemy (but it might not be effective this way)
+    - [ ] Finding other solutions
   - [ ] Writing code to clean the raw data
+    - [x] Pandas
     - [ ] SQL 
     - [ ] Pyspark
 - Feature engineering
   - [ ] Writing the current feature engineering, which is currently in Pandas.
+    - [x] Pandas
     - [ ] SQL 
     - [ ] Pyspark
   - [ ] Checking feature store options
@@ -72,8 +77,9 @@ UNDER  CONSTRUCTION
     - [ ] Other general databases
 - Model training
   - [ ] Making a general ML model/training class 
-    - [ ] Making scikit-learn model training script (the lighter the better)
-    - [ ] Making XGBoost model training script
+    - [x] Making scikit-learn model training script (the lighter the better)
+    - [x] Making XGBoost model training script
+    - [ ] Elaborating the model classes with more features (parameter tuning etc.)
   - [ ] Making evaluation script
     - [ ] Making evaluation script
     - [ ] Making cross-validation script
@@ -100,6 +106,15 @@ UNDER  CONSTRUCTION
     - [ ] Making local BI demo with Streamlit or Plotly Dash
     - [ ] Deploying the visualisation
     - [ ] Enable uploading files from local to the UI
+
+* M1の学生のタスク
+  * 実際のKaggleのコンペに参加していると想定して、それぞれのディレクトリ内での処理が正しいか確認して、パフォーマンスをあげてください。
+  * それぞれのタスクを Issues か Slack で宣言して、一つのブランチを作ってその中で完成させてプルリク送ってください。
+  * そして、最終的にはそれぞれの処理を Dockerfile と Docker-compose として記述してください。
+  * タスクは上のTODOリストから選ぶか、より詳細なタスクを加えてください。
+  * インフラ側は基本的に各データエンジニアリング、データサイエンス的に何が起きているのかには、あまり関与しないので。
+  * ただ、自分と城居は相談には乗るよ（多分 Slack で）。
+  * そのうちこういうUIの作成も考えています (https://dash.gallery/Portal/)
 
 
 # Members and roles
