@@ -10,6 +10,7 @@ def take_value_dict(key, dict):
 
 def load_local_data(csv_path):
     df =  pd.read_csv(csv_path, sep=',', low_memory=False)
+    df = df[df['fecha_dato'].isin(['2015-01-28', '2015-02-28', '2015-03-28'])]
     return df
 
 
