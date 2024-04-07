@@ -1,0 +1,4 @@
+pyyaml
+pandas
+pyodbc
+python-dotenv
