@@ -35,7 +35,7 @@ def query_from_db(query_text):
 
 
 if __name__=="__main__":
-    table_name = 'santander_cleaned_small'
+    table_name = 'santander_cleaned_sample'
     query = f"SELECT TOP(100) * FROM {table_name}"
     columns, rows = query_from_db(query)
 

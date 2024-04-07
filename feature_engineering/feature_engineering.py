@@ -2,6 +2,8 @@ import yaml
 import numpy as np
 import pandas as pd
 
+from db_connection import query_from_db
+
 def load_local_data(csv_path):
     return pd.read_csv(csv_path, sep=',', low_memory=False)
 
@@ -188,7 +190,8 @@ def label_data(df, config_dict, label_column='y'):
 
 
 if __name__ == '__main__':
-    data_source = 'csv'
+    data_source = 'workflow_test'
+
     train_path = '../data_prep/train_cleaned.csv'
     data_config_path = '../data_prep/data_prep_config_cleaned.yaml'
 
@@ -218,3 +221,8 @@ if __name__ == '__main__':
 
         with open(config_save_path, 'w') as file:
             yaml.dump(config_dict, file)
+
+    elif data_source == 'workflow_test':
+        table_name = 'santander_cleaned_sample'
+        query = f"SELECT * FROM {table_name}"
+        columns, rows = query_from_db(query)
