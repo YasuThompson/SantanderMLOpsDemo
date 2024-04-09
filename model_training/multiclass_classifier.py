@@ -52,7 +52,7 @@ class RandomForestClassifier(BaseMultiClassClassifier):
     def fit(self, x_trn, x_vld, y_trn, y_vld):
         # TODO: to implement early stopping logic here
 
-        self.model = RandomForestClassifier(n_estimators=100, random_state=42, verbose=1)
+        self.model = RandomForestClassifier()
         self.model.fit(x_trn, y_trn)
 
     def predict(self, X):
@@ -90,14 +90,11 @@ if __name__ == '__main__':
 
     multiclass_clf = RandomForestClassifier()
     # Standardizing features
-    multiclass_clf.set_scaler(X_train)
-    X_train_scaled = multiclass_clf.scale_data(X_train)
-    X_val_scaled = multiclass_clf.scale_data(X_val)
 
     # Train and evaluate RandomForestClassifier
-    multiclass_clf.fit(X_train_scaled, X_val_scaled, y_train, y_val)
-    rf_pred = multiclass_clf.predict(X_val_scaled)
-    print("Random Forest Classifier Report:")
-    print(classification_report(y_val, rf_pred))
+    multiclass_clf.fit(X_train, X_val, y_train, y_val)
+    rf_pred = multiclass_clf.predict(X_val)
+
+    metric_dict = classification_report(y_val, rf_pred, output_dict=True)
 
     pass
