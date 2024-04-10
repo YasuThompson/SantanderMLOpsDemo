@@ -19,12 +19,12 @@ def take_data_pd(df, key_timestamp_column, trn_dates, val_dates, x_features, y_f
     XY_vld = df[df[key_timestamp_column].isin(val_dates)]
 
     # 訓練、検証データを XGBoost 形態に変換します。
-    X_trn = XY_trn[x_features].values
-    Y_trn = XY_trn[y_feature].values
+    X_trn = XY_trn[x_features]
+    Y_trn = XY_trn[y_feature]
     # dtrn = xgb.DMatrix(X_trn, label=Y_trn, feature_names=features)
 
-    X_vld = XY_vld[x_features].values
-    Y_vld = XY_vld[y_feature].values
+    X_vld = XY_vld[x_features]
+    Y_vld = XY_vld[y_feature]
     # dvld = xgb.DMatrix(X_vld, label=Y_vld, feature_names=features)
 
     return X_trn, Y_trn, X_vld, Y_vld
@@ -59,7 +59,7 @@ if __name__ == '__main__':
     data_config_path = 'training_config.yaml'
     training_config_dict = read_lists_from_yaml(data_config_path)
 
-    model_save_path = 'sample_model.joblib'
+    model_save_path = '../sample_model.joblib'
 
     x_features = feature_selection(feature_eng_config_dict)
     y_feature = 'y'
