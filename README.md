@@ -90,7 +90,8 @@ UNDER  CONSTRUCTION
     - [ ] Kubeflow
     - [ ] Other general storage
 - Model serving
-  - [ ] (Survey) how do you preprocess test data when3 you inference?
+  - [x] (Survey) how do you preprocess test data when you inference?
+    - [x] Lets just use the data pipline for example with Azure ML.
   - [ ] Checking model serving options
     - [ ] MLflow 
     - [ ] Kubeflow
@@ -102,10 +103,11 @@ UNDER  CONSTRUCTION
   - [ ] Raising an alert for concept drift or whatever errors
 - Making Web App
   - [ ] Making a BI (web app) 
-    - [ ] Making a local visualization with plotly 
-    - [ ] Making local BI demo with Streamlit or Plotly Dash
+    - [x] Making a local visualization with plotly 
+    - [x] Making local BI demo with Streamlit or Plotly Dash
     - [ ] Deploying the visualisation
     - [ ] Enable uploading files from local to the UI
+    - [ ] Elaborating the UI
 
 * M1の学生のタスク
   * 実際のKaggleのコンペに参加していると想定して、それぞれのディレクトリ内での処理が正しいか確認して、パフォーマンスをあげてください。
