@@ -1,42 +1,42 @@
+import yaml
 import dash
 from dash import dcc, html
 from dash.dependencies import Input, Output
 import plotly.express as px
 import pandas as pd
 
-# Sample data
-data = pd.DataFrame({
-    'Category': ['A', 'A', 'B', 'B', 'C', 'C'],
-    'Value': [10, 15, 8, 12, 9, 6],
-    'Filter1': ['X', 'Y', 'X', 'Y', 'X', 'Y'],
-    'Filter2': ['M', 'M', 'N', 'N', 'M', 'N']
-})
+data_config_path = '../feature_engineering/feature_engineering.yaml'
+with open(data_config_path, 'r') as file:
+     data_config_dict = yaml.safe_load(file)
+
+data = pd.read_csv('sample_val_result.csv')
+
 
 # Initialize the Dash app
 app = dash.Dash(__name__)
 
 # Define the layout of the app
 app.layout = html.Div([
-    html.H1("Bar Plot with Filters"),
+    html.H1("Product purchase probability"),
 
     # Dropdown for Filter 1
-    html.Label("Select Filter 1:"),
+    html.Label("Select a customer code:"),
     dcc.Dropdown(
         id='filter1-dropdown',
         options=[
-            {'label': f, 'value': f} for f in data['Filter1'].unique()
+            {'label': f, 'value': f} for f in data['customer_code'].unique()
         ],
-        value=data['Filter1'].unique()[0]
+        value=data['customer_code'].unique()[0]
     ),
 
     # Multiselect dropdown for Filter 2
-    html.Label("Select Filter 2:"),
+    html.Label("Select products:"),
     dcc.Dropdown(
         id='filter2-dropdown',
         options=[
-            {'label': f, 'value': f} for f in data['Filter2'].unique()
+            {'label': f, 'value': f} for f in data_config_dict['product_columns']
         ],
-        value=[data['Filter2'].unique()[0]],
+        value=data_config_dict['product_columns'],
         multi=True
     ),
 
@@ -55,8 +55,12 @@ def update_bar_plot(filter1_value, filter2_value):
     if not isinstance(filter2_value, list):
         filter2_value = [filter2_value]
 
-    filtered_data = data[(data['Filter1'] == filter1_value) & (data['Filter2'].isin(filter2_value))]
-    fig = px.bar(filtered_data, x='Category', y='Value', title='Filtered Bar Plot')
+    filtered_data = data[data['customer_code'] == filter1_value]
+    filtered_data = filtered_data[filter2_value].iloc[0].tolist()
+
+    fig = px.bar(filtered_data, x=filter2_value, y=filtered_data)
+    fig.update_layout(yaxis=dict(title='Probability of purchase'))
+
     return fig
 
 
