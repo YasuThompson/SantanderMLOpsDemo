@@ -67,6 +67,8 @@ if __name__ == '__main__':
     trained_model_path = '../sample_model.joblib'
     loaded_model = joblib.load(trained_model_path)
 
+    product_list = feature_eng_config_dict['product_columns']
+
     x_features = feature_selection(feature_eng_config_dict)
     y_feature = 'y'
 
@@ -80,10 +82,22 @@ if __name__ == '__main__':
 
     # dvld = xgb.DMatrix(X_vld, label=Y_vld, feature_names=x_features)
     preds_vld = loaded_model.model.predict_proba(XY_vld[x_features])
+    preds_vld = pd.DataFrame(preds_vld).reset_index(drop=True)
+    preds_vld.columns = product_list
+
+    XY_vld = XY_vld.reset_index()
+    # df_result = XY_vld.join(a)
+
+    df_result = pd.merge(XY_vld[['customer_code']],
+                        preds_vld,
+                         left_index=True,
+                         right_index=True)
+
+    columns_to_export = ['customer_code'] + product_list
+    df_result[columns_to_export].to_csv('sample_val_result.csv')
 
     customer_id_list_vld = XY_vld[feature_eng_config_dict['customer_id']].values
 
-    product_list = feature_eng_config_dict['product_columns']
 
     # 検証データから新規購買を求めます。
     for prod in feature_eng_config_dict['product_columns']:
@@ -101,17 +115,17 @@ if __name__ == '__main__':
     result_vld_dict = {}
     for customer_id, pred in zip(customer_id_list_vld, preds_vld):
         y_prods = [(y, p, ip) for y, p, ip in zip(pred, product_list, range(len(product_list)))]
-        # print(y_prods)
         y_prods = sorted(y_prods, key=lambda a: a[0], reverse=True)[:7]
-        # print(y_prods)
-        result_vld_dict[str(customer_id)] = [ip for y, p, ip in y_prods]
+
+
+        # result_vld_dict[str(customer_id)] = [{'product': p, 'probability': float(y)} for y, p, ip in y_prods]
 
     label_list = list(add_vld_dict.values())
     result_list = list(result_vld_dict.values())
 
-    print(mapk( label_list, result_list, 7, 0.0))
-
-    pred_result_path = 'sample_val_result.json'
-    # Dump dictionary to JSON file
-    with open(pred_result_path, "w") as json_file:
-        json.dump(result_vld_dict, json_file)
+    # print(mapk( label_list, result_list, 7, 0.0))
+    #
+    # pred_result_path = 'sample_val_result.json'
+    # # Dump dictionary to JSON file
+    # with open(pred_result_path, "w") as json_file:
+    #     json.dump(result_vld_dict, json_file)
