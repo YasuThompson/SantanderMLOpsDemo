@@ -27,7 +27,7 @@ docker build -t "${DOCKER_REGISTRY}/kubeflow-images/mssql-cmd:latest" -f "msssql
 docker push "${DOCKER_REGISTRY}/kubeflow-images/mssql-cmd:latest"
 ```
 
-[!NOTE] `DOCKER_REGISTRY` is private (or public) docker registry. If you use microk8s on your local machine and enable microk8s registry addon, it shuld be `localhost:32000`.
+[!NOTE] `DOCKER_REGISTRY` is private (or public) docker registry. If you use microk8s on your local machine and enable microk8s registry addon, it shuld be `localhost:32000`. And ensure your registry shuld support https connection or your cluster can reach your registry using http connection.
 
 [!NOTE]　By building this docker image, you agree to the mssql EULA.
 
