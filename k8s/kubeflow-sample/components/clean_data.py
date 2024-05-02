@@ -31,7 +31,8 @@ def container_no_input():
             os.environ["MSSQL_SERVER"],
             os.environ["MSSQL_PASSWORD"],
             os.environ["MSSQL_USER"],
-            QUERY
+            QUERY,
+            os.environ["MSSQL_DATABASE"],
         ],
     )
 

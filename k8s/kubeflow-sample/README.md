@@ -18,6 +18,7 @@ You need to export below variables.
 - MSSQL_SERVER: mssql server address (like AAA.BBB.windows.net)
 - MSSQL_PASSWORD: mssql server login user
 - MSSQL_USER: msssql server login password
+- MSSQL_DATABASE: database name
 
 ## 2. Set up docker image for pipline
 
