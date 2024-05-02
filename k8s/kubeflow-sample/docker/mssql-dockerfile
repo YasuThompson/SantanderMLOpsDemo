@@ -1,0 +1,10 @@
+FROM ubuntu:24.04
+RUN apt-get update && apt-get install -y curl gnupg apt-transport-https software-properties-common wget
+RUN curl https://packages.microsoft.com/keys/microsoft.asc | tee /etc/apt/trusted.gpg.d/microsoft.asc
+
+RUN add-apt-repository "$(wget -qO- https://packages.microsoft.com/config/ubuntu/20.04/prod.list)"
+
+RUN apt-get update 
+RUN ACCEPT_EULA=Y apt-get install -y sqlcmd
+COPY ./entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
