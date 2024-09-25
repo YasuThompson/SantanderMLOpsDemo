@@ -7,15 +7,7 @@ An MLOps demo using Santander Product Recommendation Kaggle Competition Dataset.
 - There are relatively a good amount of data (13647309 rows for training data, 929615 rows for test data)
 - The task is relatively simple (multi class classification)
 - The data are relatively messy and in Spanish, so it is close to real world scenarios.
-- **Data science part is not really the point this time,** so let's not elaborate models and their trainings in the beginning. 
-
-# Rule
-- Please notify which task you work on to everyone
-- Task with one indentation: ask Yasuto before starting 
-- Task with two indentations: you don't need to ask me, but please share results
-- Start with the smalles computations to save cloud cost (e.g.don't process all the data, don't do thorough grid search)
-- Suggest any necessary tasks if you think it's needed, and make them into small pieces and write in the TODO list. 
-- Be open to any questions on issues
+- **Data science part is not really the point this time,** so let's not elaborate models and their trainings in the beginning.
 
 # (Starting point) how to run locally 
 ## 1. Data preparation
@@ -109,18 +101,6 @@ UNDER  CONSTRUCTION
     - [ ] Enable uploading files from local to the UI
     - [ ] Elaborating the UI
 
-* M1の学生のタスク
-  * 実際のKaggleのコンペに参加していると想定して、それぞれのディレクトリ内での処理が正しいか確認して、パフォーマンスをあげてください。
-  * それぞれのタスクを Issues か Slack で宣言して、一つのブランチを作ってその中で完成させてプルリク送ってください。
-  * そして、最終的にはそれぞれの処理を Dockerfile と Docker-compose として記述してください。
-  * タスクは上のTODOリストから選ぶか、より詳細なタスクを加えてください。
-  * インフラ側は基本的に各データエンジニアリング、データサイエンス的に何が起きているのかには、あまり関与しない。
-  * ただ、自分と城居は相談には乗るよ（多分 Slack で）。データサイエンス部分は田村に気軽に相談してください。
-  * そのうちこういうUIの作成も考えています (https://dash.gallery/Portal/)
-  * [この本](https://www.amazon.co.jp/Kaggle%E3%82%B3%E3%83%B3%E3%83%9A%E3%83%86%E3%82%A3%E3%82%B7%E3%83%A7%E3%83%B3-%E3%83%81%E3%83%A3%E3%83%AC%E3%83%B3%E3%82%B8%E3%83%96%E3%83%83%E3%82%AF-Jung-Kweon-Woo/dp/4839968934)を中古で買ってもいいかも
-
-
-皆さんの参加待っています。
 
 ### Reference：
 * [Santander Product Recommendation](https://www.kaggle.com/c/santander-product-recommendation)
